@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="BackendRRHHPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.bitlab.entidades.Pagos</class>
+    <class>com.bitlab.entidades.Area</class>
+    <class>com.bitlab.entidades.Tipo</class>
+    <class>com.bitlab.entidades.Sucursal</class>
+    <class>com.bitlab.entidades.HistorialEmpleado</class>
+    <class>com.bitlab.entidades.Sexo</class>
+    <class>com.bitlab.entidades.Salario</class>
+    <class>com.bitlab.entidades.Estado</class>
+    <class>com.bitlab.entidades.Usuario</class>
+    <class>com.bitlab.entidades.EstadoCivil</class>
+    <class>com.bitlab.entidades.Empleado</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://35.202.217.37:3306/DB_SISTEMA_RRHH?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="Isaias"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="Bitlab2020*"/>
+    </properties>
+  </persistence-unit>
+</persistence>
