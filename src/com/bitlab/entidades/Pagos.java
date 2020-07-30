@@ -24,19 +24,12 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_PG_PAGOS", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Pagos.findAll", query = "SELECT p FROM Pagos p"),
-    @NamedQuery(name = "Pagos.findByPgId", query = "SELECT p FROM Pagos p WHERE p.pgId = :pgId"),
-    @NamedQuery(name = "Pagos.findByPgFecha", query = "SELECT p FROM Pagos p WHERE p.pgFecha = :pgFecha"),
-    @NamedQuery(name = "Pagos.findByPgMonto", query = "SELECT p FROM Pagos p WHERE p.pgMonto = :pgMonto"),
-    @NamedQuery(name = "Pagos.findByAFechaCreacion", query = "SELECT p FROM Pagos p WHERE p.aFechaCreacion = :aFechaCreacion"),
-    @NamedQuery(name = "Pagos.findByAUsuarioModifica", query = "SELECT p FROM Pagos p WHERE p.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "Pagos.findByAFechaModificacion", query = "SELECT p FROM Pagos p WHERE p.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "Pagos.findByAUsuarioCrea", query = "SELECT p FROM Pagos p WHERE p.aUsuarioCrea = :aUsuarioCrea")})
+    @NamedQuery(name = "Pagos.findAll", query = "SELECT p FROM Pagos p")})
 public class Pagos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,24 +38,29 @@ public class Pagos implements Serializable {
     @Basic(optional = false)
     @Column(name = "PG_ID", nullable = false)
     private Integer pgId;
-    @Column(name = "PG_FECHA")
+    @Basic(optional = false)
+    @Column(name = "PG_FECHA", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date pgFecha;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "PG_MONTO", precision = 22, scale = 0)
-    private Double pgMonto;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "PG_MONTO", nullable = false)
+    private double pgMonto;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @JoinColumn(name = "EP_ID", referencedColumnName = "EP_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @JoinColumn(name = "EP_ID", referencedColumnName = "EP_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Empleado epId;
 
     public Pagos() {
@@ -70,6 +68,16 @@ public class Pagos implements Serializable {
 
     public Pagos(Integer pgId) {
         this.pgId = pgId;
+    }
+
+    public Pagos(Integer pgId, Date pgFecha, double pgMonto, Date aFechaCreacion, int aUsuarioModifica, Date aFechaModificacion, int aUsuarioCrea) {
+        this.pgId = pgId;
+        this.pgFecha = pgFecha;
+        this.pgMonto = pgMonto;
+        this.aFechaCreacion = aFechaCreacion;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aUsuarioCrea = aUsuarioCrea;
     }
 
     public Integer getPgId() {
@@ -88,11 +96,11 @@ public class Pagos implements Serializable {
         this.pgFecha = pgFecha;
     }
 
-    public Double getPgMonto() {
+    public double getPgMonto() {
         return pgMonto;
     }
 
-    public void setPgMonto(Double pgMonto) {
+    public void setPgMonto(double pgMonto) {
         this.pgMonto = pgMonto;
     }
 
@@ -104,11 +112,11 @@ public class Pagos implements Serializable {
         this.aFechaCreacion = aFechaCreacion;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 
@@ -120,11 +128,11 @@ public class Pagos implements Serializable {
         this.aFechaModificacion = aFechaModificacion;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 

@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,38 +25,38 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_ES_ESTADO", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Estado.findAll", query = "SELECT e FROM Estado e"),
-    @NamedQuery(name = "Estado.findByEsId", query = "SELECT e FROM Estado e WHERE e.esId = :esId"),
-    @NamedQuery(name = "Estado.findByEsNombre", query = "SELECT e FROM Estado e WHERE e.esNombre = :esNombre"),
-    @NamedQuery(name = "Estado.findByAFechaCreacion", query = "SELECT e FROM Estado e WHERE e.aFechaCreacion = :aFechaCreacion"),
-    @NamedQuery(name = "Estado.findByAFechaModificacion", query = "SELECT e FROM Estado e WHERE e.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "Estado.findByAUsuarioModifica", query = "SELECT e FROM Estado e WHERE e.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "Estado.findByAUsuarioCrea", query = "SELECT e FROM Estado e WHERE e.aUsuarioCrea = :aUsuarioCrea")})
+    @NamedQuery(name = "Estado.findAll", query = "SELECT e FROM Estado e")})
 public class Estado implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ES_ID", nullable = false)
     private Integer esId;
-    @Column(name = "ES_NOMBRE", length = 100)
+    @Basic(optional = false)
+    @Column(name = "ES_NOMBRE", nullable = false, length = 100)
     private String esNombre;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @OneToMany(mappedBy = "esId", fetch = FetchType.LAZY)
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esId", fetch = FetchType.LAZY)
     private List<Empleado> empleadoList;
 
     public Estado() {
@@ -61,6 +64,15 @@ public class Estado implements Serializable {
 
     public Estado(Integer esId) {
         this.esId = esId;
+    }
+
+    public Estado(Integer esId, String esNombre, Date aFechaCreacion, Date aFechaModificacion, int aUsuarioModifica, int aUsuarioCrea) {
+        this.esId = esId;
+        this.esNombre = esNombre;
+        this.aFechaCreacion = aFechaCreacion;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aUsuarioCrea = aUsuarioCrea;
     }
 
     public Integer getEsId() {
@@ -95,19 +107,19 @@ public class Estado implements Serializable {
         this.aFechaModificacion = aFechaModificacion;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 

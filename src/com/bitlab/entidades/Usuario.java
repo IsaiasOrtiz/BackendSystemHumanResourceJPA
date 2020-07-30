@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,46 +24,45 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_US_USUARIO", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByUsId", query = "SELECT u FROM Usuario u WHERE u.usId = :usId"),
-    @NamedQuery(name = "Usuario.findByUsUsuario", query = "SELECT u FROM Usuario u WHERE u.usUsuario = :usUsuario"),
-    @NamedQuery(name = "Usuario.findByUsClave", query = "SELECT u FROM Usuario u WHERE u.usClave = :usClave"),
-    @NamedQuery(name = "Usuario.findByAFechaModificacion", query = "SELECT u FROM Usuario u WHERE u.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "Usuario.findByAUsuarioCrea", query = "SELECT u FROM Usuario u WHERE u.aUsuarioCrea = :aUsuarioCrea"),
-    @NamedQuery(name = "Usuario.findByAUsuarioModifica", query = "SELECT u FROM Usuario u WHERE u.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "Usuario.findByAFechaCreacion", query = "SELECT u FROM Usuario u WHERE u.aFechaCreacion = :aFechaCreacion")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "US_ID", nullable = false)
     private Integer usId;
-    @Column(name = "US_USUARIO", length = 100)
+    @Basic(optional = false)
+    @Column(name = "US_USUARIO", nullable = false, length = 100)
     private String usUsuario;
     @Basic(optional = false)
     @Column(name = "US_CLAVE", nullable = false, length = 400)
     private String usClave;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @JoinColumn(name = "EP_ID", referencedColumnName = "EP_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EP_ID", referencedColumnName = "EP_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Empleado epId;
-    @JoinColumn(name = "TP_ID", referencedColumnName = "TP_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TP_ID", referencedColumnName = "TP_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Tipo tpId;
 
     public Usuario() {
@@ -71,9 +72,14 @@ public class Usuario implements Serializable {
         this.usId = usId;
     }
 
-    public Usuario(Integer usId, String usClave) {
+    public Usuario(Integer usId, String usUsuario, String usClave, Date aFechaModificacion, int aUsuarioCrea, int aUsuarioModifica, Date aFechaCreacion) {
         this.usId = usId;
+        this.usUsuario = usUsuario;
         this.usClave = usClave;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aUsuarioCrea = aUsuarioCrea;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aFechaCreacion = aFechaCreacion;
     }
 
     public Integer getUsId() {
@@ -108,19 +114,19 @@ public class Usuario implements Serializable {
         this.aFechaModificacion = aFechaModificacion;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 

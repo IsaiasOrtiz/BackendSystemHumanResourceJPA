@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,30 +27,22 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_EP_EMPLEADO", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Empleado.findAll", query = "SELECT e FROM Empleado e"),
-    @NamedQuery(name = "Empleado.findByEpId", query = "SELECT e FROM Empleado e WHERE e.epId = :epId"),
-    @NamedQuery(name = "Empleado.findByEpNombres", query = "SELECT e FROM Empleado e WHERE e.epNombres = :epNombres"),
-    @NamedQuery(name = "Empleado.findByEpApellidos", query = "SELECT e FROM Empleado e WHERE e.epApellidos = :epApellidos"),
-    @NamedQuery(name = "Empleado.findByEpDireccion", query = "SELECT e FROM Empleado e WHERE e.epDireccion = :epDireccion"),
-    @NamedQuery(name = "Empleado.findByEpFechaNacimiento", query = "SELECT e FROM Empleado e WHERE e.epFechaNacimiento = :epFechaNacimiento"),
-    @NamedQuery(name = "Empleado.findByEpDui", query = "SELECT e FROM Empleado e WHERE e.epDui = :epDui"),
-    @NamedQuery(name = "Empleado.findByAUsuarioModifica", query = "SELECT e FROM Empleado e WHERE e.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "Empleado.findByAUsuarioCrea", query = "SELECT e FROM Empleado e WHERE e.aUsuarioCrea = :aUsuarioCrea"),
-    @NamedQuery(name = "Empleado.findByAFechaCreacion", query = "SELECT e FROM Empleado e WHERE e.aFechaCreacion = :aFechaCreacion"),
-    @NamedQuery(name = "Empleado.findByAFechaModificacion", query = "SELECT e FROM Empleado e WHERE e.aFechaModificacion = :aFechaModificacion")})
+    @NamedQuery(name = "Empleado.findAll", query = "SELECT e FROM Empleado e")})
 public class Empleado implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "EP_ID", nullable = false)
     private Integer epId;
-    @Column(name = "EP_NOMBRES", length = 200)
+    @Basic(optional = false)
+    @Column(name = "EP_NOMBRES", nullable = false, length = 200)
     private String epNombres;
     @Basic(optional = false)
     @Column(name = "EP_APELLIDOS", nullable = false, length = 200)
@@ -55,42 +50,47 @@ public class Empleado implements Serializable {
     @Basic(optional = false)
     @Column(name = "EP_DIRECCION", nullable = false, length = 500)
     private String epDireccion;
-    @Column(name = "EP_FECHA_NACIMIENTO")
+    @Basic(optional = false)
+    @Column(name = "EP_FECHA_NACIMIENTO", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date epFechaNacimiento;
     @Basic(optional = false)
     @Column(name = "EP_DUI", nullable = false, length = 20)
     private String epDui;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "EP_SALARIO", nullable = false)
+    private double epSalario;
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @OneToMany(mappedBy = "epId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "epId", fetch = FetchType.LAZY)
     private List<HistorialEmpleado> historialEmpleadoList;
-    @OneToMany(mappedBy = "epId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "epId", fetch = FetchType.LAZY)
     private List<Usuario> usuarioList;
-    @OneToMany(mappedBy = "epId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "epId", fetch = FetchType.LAZY)
     private List<Pagos> pagosList;
-    @JoinColumn(name = "DP_ID", referencedColumnName = "DP_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DP_ID", referencedColumnName = "DP_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Area dpId;
-    @JoinColumn(name = "EC_ID", referencedColumnName = "EC_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EC_ID", referencedColumnName = "EC_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadoCivil ecId;
-    @JoinColumn(name = "ES_ID", referencedColumnName = "ES_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ES_ID", referencedColumnName = "ES_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Estado esId;
-    @JoinColumn(name = "SL_ID", referencedColumnName = "SL_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Salario slId;
-    @JoinColumn(name = "SX_ID", referencedColumnName = "SX_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SX_ID", referencedColumnName = "SX_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Sexo sxId;
 
     public Empleado() {
@@ -100,11 +100,18 @@ public class Empleado implements Serializable {
         this.epId = epId;
     }
 
-    public Empleado(Integer epId, String epApellidos, String epDireccion, String epDui) {
+    public Empleado(Integer epId, String epNombres, String epApellidos, String epDireccion, Date epFechaNacimiento, String epDui, double epSalario, int aUsuarioModifica, int aUsuarioCrea, Date aFechaCreacion, Date aFechaModificacion) {
         this.epId = epId;
+        this.epNombres = epNombres;
         this.epApellidos = epApellidos;
         this.epDireccion = epDireccion;
+        this.epFechaNacimiento = epFechaNacimiento;
         this.epDui = epDui;
+        this.epSalario = epSalario;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aUsuarioCrea = aUsuarioCrea;
+        this.aFechaCreacion = aFechaCreacion;
+        this.aFechaModificacion = aFechaModificacion;
     }
 
     public Integer getEpId() {
@@ -155,19 +162,27 @@ public class Empleado implements Serializable {
         this.epDui = epDui;
     }
 
-    public Integer getAUsuarioModifica() {
+    public double getEpSalario() {
+        return epSalario;
+    }
+
+    public void setEpSalario(double epSalario) {
+        this.epSalario = epSalario;
+    }
+
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 
@@ -233,14 +248,6 @@ public class Empleado implements Serializable {
 
     public void setEsId(Estado esId) {
         this.esId = esId;
-    }
-
-    public Salario getSlId() {
-        return slId;
-    }
-
-    public void setSlId(Salario slId) {
-        this.slId = slId;
     }
 
     public Sexo getSxId() {

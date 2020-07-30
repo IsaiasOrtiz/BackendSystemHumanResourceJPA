@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,41 +27,41 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_DP_AREA", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Area.findAll", query = "SELECT a FROM Area a"),
-    @NamedQuery(name = "Area.findByDpId", query = "SELECT a FROM Area a WHERE a.dpId = :dpId"),
-    @NamedQuery(name = "Area.findByDpNombre", query = "SELECT a FROM Area a WHERE a.dpNombre = :dpNombre"),
-    @NamedQuery(name = "Area.findByAUsuarioCrea", query = "SELECT a FROM Area a WHERE a.aUsuarioCrea = :aUsuarioCrea"),
-    @NamedQuery(name = "Area.findByAFechaModificacion", query = "SELECT a FROM Area a WHERE a.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "Area.findByAFechaCreacion", query = "SELECT a FROM Area a WHERE a.aFechaCreacion = :aFechaCreacion"),
-    @NamedQuery(name = "Area.findByAUsuarioModifica", query = "SELECT a FROM Area a WHERE a.aUsuarioModifica = :aUsuarioModifica")})
+    @NamedQuery(name = "Area.findAll", query = "SELECT a FROM Area a")})
 public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "DP_ID", nullable = false)
     private Integer dpId;
-    @Column(name = "DP_NOMBRE", length = 150)
+    @Basic(optional = false)
+    @Column(name = "DP_NOMBRE", nullable = false, length = 150)
     private String dpNombre;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @JoinColumn(name = "SC_ID", referencedColumnName = "SC_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @JoinColumn(name = "SC_ID", referencedColumnName = "SC_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Sucursal scId;
-    @OneToMany(mappedBy = "dpId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dpId", fetch = FetchType.LAZY)
     private List<Empleado> empleadoList;
 
     public Area() {
@@ -66,6 +69,15 @@ public class Area implements Serializable {
 
     public Area(Integer dpId) {
         this.dpId = dpId;
+    }
+
+    public Area(Integer dpId, String dpNombre, int aUsuarioCrea, Date aFechaModificacion, Date aFechaCreacion, int aUsuarioModifica) {
+        this.dpId = dpId;
+        this.dpNombre = dpNombre;
+        this.aUsuarioCrea = aUsuarioCrea;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aFechaCreacion = aFechaCreacion;
+        this.aUsuarioModifica = aUsuarioModifica;
     }
 
     public Integer getDpId() {
@@ -84,11 +96,11 @@ public class Area implements Serializable {
         this.dpNombre = dpNombre;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 
@@ -108,11 +120,11 @@ public class Area implements Serializable {
         this.aFechaCreacion = aFechaCreacion;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 

@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,38 +25,38 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_SC_SUCURSAL", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Sucursal.findAll", query = "SELECT s FROM Sucursal s"),
-    @NamedQuery(name = "Sucursal.findByScId", query = "SELECT s FROM Sucursal s WHERE s.scId = :scId"),
-    @NamedQuery(name = "Sucursal.findByScNombre", query = "SELECT s FROM Sucursal s WHERE s.scNombre = :scNombre"),
-    @NamedQuery(name = "Sucursal.findByAFechaModificacion", query = "SELECT s FROM Sucursal s WHERE s.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "Sucursal.findByAUsuarioModifica", query = "SELECT s FROM Sucursal s WHERE s.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "Sucursal.findByAFechaCreacion", query = "SELECT s FROM Sucursal s WHERE s.aFechaCreacion = :aFechaCreacion"),
-    @NamedQuery(name = "Sucursal.findByAUsuarioCrea", query = "SELECT s FROM Sucursal s WHERE s.aUsuarioCrea = :aUsuarioCrea")})
+    @NamedQuery(name = "Sucursal.findAll", query = "SELECT s FROM Sucursal s")})
 public class Sucursal implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "SC_ID", nullable = false)
     private Integer scId;
-    @Column(name = "SC_NOMBRE", length = 50)
+    @Basic(optional = false)
+    @Column(name = "SC_NOMBRE", nullable = false, length = 50)
     private String scNombre;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @OneToMany(mappedBy = "scId", fetch = FetchType.LAZY)
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scId", fetch = FetchType.LAZY)
     private List<Area> areaList;
 
     public Sucursal() {
@@ -61,6 +64,15 @@ public class Sucursal implements Serializable {
 
     public Sucursal(Integer scId) {
         this.scId = scId;
+    }
+
+    public Sucursal(Integer scId, String scNombre, Date aFechaModificacion, int aUsuarioModifica, Date aFechaCreacion, int aUsuarioCrea) {
+        this.scId = scId;
+        this.scNombre = scNombre;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aFechaCreacion = aFechaCreacion;
+        this.aUsuarioCrea = aUsuarioCrea;
     }
 
     public Integer getScId() {
@@ -87,11 +99,11 @@ public class Sucursal implements Serializable {
         this.aFechaModificacion = aFechaModificacion;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 
@@ -103,11 +115,11 @@ public class Sucursal implements Serializable {
         this.aFechaCreacion = aFechaCreacion;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 

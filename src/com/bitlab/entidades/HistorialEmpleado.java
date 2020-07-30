@@ -24,18 +24,12 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_HTP_HISTORIAL_EMPLEADO", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "HistorialEmpleado.findAll", query = "SELECT h FROM HistorialEmpleado h"),
-    @NamedQuery(name = "HistorialEmpleado.findByHtpId", query = "SELECT h FROM HistorialEmpleado h WHERE h.htpId = :htpId"),
-    @NamedQuery(name = "HistorialEmpleado.findByHtpDescripcion", query = "SELECT h FROM HistorialEmpleado h WHERE h.htpDescripcion = :htpDescripcion"),
-    @NamedQuery(name = "HistorialEmpleado.findByAUsuarioModifica", query = "SELECT h FROM HistorialEmpleado h WHERE h.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "HistorialEmpleado.findByAUsuarioCrea", query = "SELECT h FROM HistorialEmpleado h WHERE h.aUsuarioCrea = :aUsuarioCrea"),
-    @NamedQuery(name = "HistorialEmpleado.findByAFechaModificacion", query = "SELECT h FROM HistorialEmpleado h WHERE h.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "HistorialEmpleado.findByAFechaCreacion", query = "SELECT h FROM HistorialEmpleado h WHERE h.aFechaCreacion = :aFechaCreacion")})
+    @NamedQuery(name = "HistorialEmpleado.findAll", query = "SELECT h FROM HistorialEmpleado h")})
 public class HistorialEmpleado implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,20 +38,25 @@ public class HistorialEmpleado implements Serializable {
     @Basic(optional = false)
     @Column(name = "HTP_ID", nullable = false)
     private Integer htpId;
-    @Column(name = "HTP_DESCRIPCION", length = 500)
+    @Basic(optional = false)
+    @Column(name = "HTP_DESCRIPCION", nullable = false, length = 500)
     private String htpDescripcion;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @JoinColumn(name = "EP_ID", referencedColumnName = "EP_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EP_ID", referencedColumnName = "EP_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Empleado epId;
 
     public HistorialEmpleado() {
@@ -65,6 +64,15 @@ public class HistorialEmpleado implements Serializable {
 
     public HistorialEmpleado(Integer htpId) {
         this.htpId = htpId;
+    }
+
+    public HistorialEmpleado(Integer htpId, String htpDescripcion, int aUsuarioModifica, int aUsuarioCrea, Date aFechaModificacion, Date aFechaCreacion) {
+        this.htpId = htpId;
+        this.htpDescripcion = htpDescripcion;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aUsuarioCrea = aUsuarioCrea;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aFechaCreacion = aFechaCreacion;
     }
 
     public Integer getHtpId() {
@@ -83,19 +91,19 @@ public class HistorialEmpleado implements Serializable {
         this.htpDescripcion = htpDescripcion;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 

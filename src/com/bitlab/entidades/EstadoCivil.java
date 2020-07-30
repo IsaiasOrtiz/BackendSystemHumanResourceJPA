@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,38 +25,38 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Douglas Isaias Valle Ortiz
+ * @author elcon
  */
 @Entity
 @Table(name = "SRH_EC_ESTADO_CIVIL", catalog = "DB_SISTEMA_RRHH", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "EstadoCivil.findAll", query = "SELECT e FROM EstadoCivil e"),
-    @NamedQuery(name = "EstadoCivil.findByEcId", query = "SELECT e FROM EstadoCivil e WHERE e.ecId = :ecId"),
-    @NamedQuery(name = "EstadoCivil.findByEcNombre", query = "SELECT e FROM EstadoCivil e WHERE e.ecNombre = :ecNombre"),
-    @NamedQuery(name = "EstadoCivil.findByAUsuarioModifica", query = "SELECT e FROM EstadoCivil e WHERE e.aUsuarioModifica = :aUsuarioModifica"),
-    @NamedQuery(name = "EstadoCivil.findByAFechaModificacion", query = "SELECT e FROM EstadoCivil e WHERE e.aFechaModificacion = :aFechaModificacion"),
-    @NamedQuery(name = "EstadoCivil.findByAUsuarioCrea", query = "SELECT e FROM EstadoCivil e WHERE e.aUsuarioCrea = :aUsuarioCrea"),
-    @NamedQuery(name = "EstadoCivil.findByAFechaCreacion", query = "SELECT e FROM EstadoCivil e WHERE e.aFechaCreacion = :aFechaCreacion")})
+    @NamedQuery(name = "EstadoCivil.findAll", query = "SELECT e FROM EstadoCivil e")})
 public class EstadoCivil implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "EC_ID", nullable = false)
     private Integer ecId;
-    @Column(name = "EC_NOMBRE", length = 50)
+    @Basic(optional = false)
+    @Column(name = "EC_NOMBRE", nullable = false, length = 50)
     private String ecNombre;
-    @Column(name = "A_USUARIO_MODIFICA")
-    private Integer aUsuarioModifica;
-    @Column(name = "A_FECHA_MODIFICACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_MODIFICA", nullable = false)
+    private int aUsuarioModifica;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_MODIFICACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaModificacion;
-    @Column(name = "A_USUARIO_CREA")
-    private Integer aUsuarioCrea;
-    @Column(name = "A_FECHA_CREACION")
+    @Basic(optional = false)
+    @Column(name = "A_USUARIO_CREA", nullable = false)
+    private int aUsuarioCrea;
+    @Basic(optional = false)
+    @Column(name = "A_FECHA_CREACION", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aFechaCreacion;
-    @OneToMany(mappedBy = "ecId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ecId", fetch = FetchType.LAZY)
     private List<Empleado> empleadoList;
 
     public EstadoCivil() {
@@ -61,6 +64,15 @@ public class EstadoCivil implements Serializable {
 
     public EstadoCivil(Integer ecId) {
         this.ecId = ecId;
+    }
+
+    public EstadoCivil(Integer ecId, String ecNombre, int aUsuarioModifica, Date aFechaModificacion, int aUsuarioCrea, Date aFechaCreacion) {
+        this.ecId = ecId;
+        this.ecNombre = ecNombre;
+        this.aUsuarioModifica = aUsuarioModifica;
+        this.aFechaModificacion = aFechaModificacion;
+        this.aUsuarioCrea = aUsuarioCrea;
+        this.aFechaCreacion = aFechaCreacion;
     }
 
     public Integer getEcId() {
@@ -79,11 +91,11 @@ public class EstadoCivil implements Serializable {
         this.ecNombre = ecNombre;
     }
 
-    public Integer getAUsuarioModifica() {
+    public int getAUsuarioModifica() {
         return aUsuarioModifica;
     }
 
-    public void setAUsuarioModifica(Integer aUsuarioModifica) {
+    public void setAUsuarioModifica(int aUsuarioModifica) {
         this.aUsuarioModifica = aUsuarioModifica;
     }
 
@@ -95,11 +107,11 @@ public class EstadoCivil implements Serializable {
         this.aFechaModificacion = aFechaModificacion;
     }
 
-    public Integer getAUsuarioCrea() {
+    public int getAUsuarioCrea() {
         return aUsuarioCrea;
     }
 
-    public void setAUsuarioCrea(Integer aUsuarioCrea) {
+    public void setAUsuarioCrea(int aUsuarioCrea) {
         this.aUsuarioCrea = aUsuarioCrea;
     }
 

@@ -15,16 +15,25 @@ import javax.persistence.Persistence;
 public class FabricaConexion {
     private EntityManagerFactory fabrica;
     private static FabricaConexion instancia=new FabricaConexion();
-    
+    /**
+     * Creando el constructor privado para poder hacer uso de la 
+     * conexion como un singleton
+     */
     private FabricaConexion()
     {
         fabrica=Persistence.createEntityManagerFactory("BackendRRHHPU");
     }
-
+    /**
+     * Retorna el manejador de entidades.
+     * @return 
+     */
     public EntityManagerFactory getFabrica() {
         return fabrica;
     }
-
+    /**
+     * Optenemos la instancia singleton.
+     * @return 
+     */
     public static FabricaConexion getInstancia() {
         return instancia;
     }

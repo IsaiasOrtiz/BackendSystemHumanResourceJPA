@@ -26,19 +26,35 @@ public abstract class AbstractController<T> {
         this.entityClass = entityClass;
     }
     
-
+    /**
+     * Crea la entidad que es recibida como parametro.
+     * @param entidad 
+     */
     public void crear(T entidad) {
         opciones(CREAR, entidad);
     }
-
+    /**
+     * Edita la entidad que recibe como parametro
+     * aunque si no existe tambien la crea.
+     * @param entidad 
+     */
     public void editar(T entidad) {
         opciones(EDITAR, entidad);
     }
-
+    /**
+     * Elimina la entidad recibida.
+     * @param entidad 
+     */
     public void destruir(T entidad) {
         opciones(DESTRUIR, entidad);
     }
-
+    /**
+     * Creacion del metodo el cual recibe una accion y una entidad
+     * la cual para no repetir el codigo fue creada de esta manera.
+     * tiene las opciones de crear, editar, destruit una entidad.
+     * @param ACCION
+     * @param entidad 
+     */
     public void opciones(final String ACCION, T entidad) {
         EntityManager en = manejadorEntidades();
         try {
