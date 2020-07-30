@@ -24,6 +24,8 @@ public class BackendRRHH {
         Empleado ar=new Empleado();
         for (Empleado a : ac.encontarTodos()) {
             System.out.println(a.getEsId().getEsNombre());
+            //dasd
+            
         }
     }
     
